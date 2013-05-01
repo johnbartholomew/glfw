@@ -1,10 +1,11 @@
 //========================================================================
 // GLFW - An OpenGL library
-// Platform:    Cocoa
+// Platform:    Any
 // API version: 3.0
 // WWW:         http://www.glfw.org/
 //------------------------------------------------------------------------
-// Copyright (c) 2010 Camilla Berglund <elmindreda@elmindreda.org>
+// Copyright (c) 2002-2006 Marcus Geelnard
+// Copyright (c) 2006-2010 Camilla Berglund <elmindreda@elmindreda.org>
 //
 // This software is provided 'as-is', without any express or implied
 // warranty. In no event will the authors be held liable for any damages
@@ -29,45 +30,35 @@
 
 #include "internal.h"
 
-#include <limits.h>
-#include <string.h>
-
+#include <stdlib.h>
+#include <malloc.h>
 
 //////////////////////////////////////////////////////////////////////////
-//////                       GLFW platform API                      //////
+//////                       GLFW internal API                      //////
 //////////////////////////////////////////////////////////////////////////
 
-void _glfwPlatformSetClipboardString(_GLFWwindow* window, const char* string)
+void *_glfwCheckedMalloc(size_t size)
 {
-    NSArray* types = [NSArray arrayWithObjects:NSStringPboardType, nil];
-
-    NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
-    [pasteboard declareTypes:types owner:nil];
-    [pasteboard setString:[NSString stringWithUTF8String:string]
-                  forType:NSStringPboardType];
+    void *p = malloc(size);
+    if (!p) { abort(); }
+    return p;
 }
 
-const char* _glfwPlatformGetClipboardString(_GLFWwindow* window)
+void *_glfwCheckedCalloc(size_t count, size_t size)
 {
-    NSPasteboard* pasteboard = [NSPasteboard generalPasteboard];
-
-    if (![[pasteboard types] containsObject:NSStringPboardType])
-    {
-        _glfwInputError(GLFW_FORMAT_UNAVAILABLE, NULL);
-        return NULL;
-    }
-
-    NSString* object = [pasteboard stringForType:NSStringPboardType];
-    if (!object)
-    {
-        _glfwInputError(GLFW_PLATFORM_ERROR,
-                        "Cocoa: Failed to retrieve object from pasteboard");
-        return NULL;
-    }
-
-    _glfwFree(_glfw.ns.clipboardString);
-    _glfw.ns.clipboardString = strdup([object UTF8String]);
-
-    return _glfw.ns.clipboardString;
+    void *p = calloc(count, size);
+    if (!p) { abort(); }
+    return p;
 }
 
+void *_glfwCheckedRealloc(void *ptr, size_t size)
+{
+    void *p = realloc(ptr, size);
+    if (!p) { abort(); }
+    return p;
+}
+
+void _glfwFree(void *ptr)
+{
+    free(ptr);
+}

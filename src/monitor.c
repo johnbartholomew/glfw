@@ -35,7 +35,6 @@
 #include <limits.h>
 
 #if defined(_MSC_VER)
- #include <malloc.h>
  #define strdup _strdup
 #endif
 
@@ -80,7 +79,7 @@ static int refreshVideoModes(_GLFWmonitor* monitor)
 
     qsort(modes, modeCount, sizeof(GLFWvidmode), compareVideoModes);
 
-    free(monitor->modes);
+    _glfwFree(monitor->modes);
     monitor->modes = modes;
     monitor->modeCount = modeCount;
 
@@ -155,7 +154,7 @@ void _glfwInputMonitorChange(void)
 
 _GLFWmonitor* _glfwCreateMonitor(const char* name, int widthMM, int heightMM)
 {
-    _GLFWmonitor* monitor = (_GLFWmonitor*) calloc(1, sizeof(_GLFWmonitor));
+    _GLFWmonitor* monitor = (_GLFWmonitor*) _glfwCheckedCalloc(1, sizeof(_GLFWmonitor));
     monitor->name = strdup(name);
     monitor->widthMM = widthMM;
     monitor->heightMM = heightMM;
@@ -168,9 +167,9 @@ void _glfwDestroyMonitor(_GLFWmonitor* monitor)
     if (monitor == NULL)
         return;
 
-    free(monitor->modes);
-    free(monitor->name);
-    free(monitor);
+    _glfwFree(monitor->modes);
+    _glfwFree(monitor->name);
+    _glfwFree(monitor);
 }
 
 void _glfwDestroyMonitors(_GLFWmonitor** monitors, int count)
@@ -180,7 +179,7 @@ void _glfwDestroyMonitors(_GLFWmonitor** monitors, int count)
     for (i = 0;  i < count;  i++)
         _glfwDestroyMonitor(monitors[i]);
 
-    free(monitors);
+    _glfwFree(monitors);
 }
 
 const GLFWvidmode* _glfwChooseVideoMode(_GLFWmonitor* monitor,

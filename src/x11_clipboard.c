@@ -184,7 +184,7 @@ static Atom writeTargetToProperty(const XSelectionRequestEvent* request)
 
 void _glfwHandleSelectionClear(XEvent* event)
 {
-    free(_glfw.x11.selection.string);
+    _glfwFree(_glfw.x11.selection.string);
     _glfw.x11.selection.string = NULL;
 }
 
@@ -256,7 +256,7 @@ void _glfwPushSelectionToManager(_GLFWwindow* window)
 
 void _glfwPlatformSetClipboardString(_GLFWwindow* window, const char* string)
 {
-    free(_glfw.x11.selection.string);
+    _glfwFree(_glfw.x11.selection.string);
     _glfw.x11.selection.string = strdup(string);
 
     XSetSelectionOwner(_glfw.x11.display,
@@ -287,7 +287,7 @@ const char* _glfwPlatformGetClipboardString(_GLFWwindow* window)
         return _glfw.x11.selection.string;
     }
 
-    free(_glfw.x11.selection.string);
+    _glfwFree(_glfw.x11.selection.string);
     _glfw.x11.selection.string = NULL;
 
     for (i = 0;  i < formatCount;  i++)

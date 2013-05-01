@@ -9,7 +9,7 @@ endif()
 
 set(common_HEADERS ${GLFW_SOURCE_DIR}/include/GL/glfw3.h internal.h)
 set(common_SOURCES clipboard.c context.c gamma.c init.c input.c joystick.c
-                   monitor.c time.c window.c)
+                   memory.c monitor.c time.c window.c)
 
 if (_GLFW_COCOA)
     set(glfw_HEADERS ${common_HEADERS} cocoa_platform.h)

@@ -122,7 +122,7 @@ static void addJoystickElement(_GLFWjoy* joystick, CFTypeRef refElement)
             long number;
             CFTypeRef refType;
 
-            _GLFWjoyelement* element = (_GLFWjoyelement*) malloc(sizeof(_GLFWjoyelement));
+            _GLFWjoyelement* element = (_GLFWjoyelement*) _glfwCheckedMalloc(sizeof(_GLFWjoyelement));
 
             CFArrayAppendValue(elementsArray, element);
 
@@ -203,7 +203,7 @@ static void removeJoystick(_GLFWjoy* joystick)
         {
             _GLFWjoyelement* axes =
                 (_GLFWjoyelement*) CFArrayGetValueAtIndex(joystick->axes, i);
-            free(axes);
+            _glfwFree(axes);
         }
         CFArrayRemoveAllValues(joystick->axes);
         joystick->numAxes = 0;
@@ -212,7 +212,7 @@ static void removeJoystick(_GLFWjoy* joystick)
         {
             _GLFWjoyelement* button =
                 (_GLFWjoyelement*) CFArrayGetValueAtIndex(joystick->buttons, i);
-            free(button);
+            _glfwFree(button);
         }
         CFArrayRemoveAllValues(joystick->buttons);
         joystick->numButtons = 0;
@@ -221,7 +221,7 @@ static void removeJoystick(_GLFWjoy* joystick)
         {
             _GLFWjoyelement* hat =
                 (_GLFWjoyelement*) CFArrayGetValueAtIndex(joystick->hats, i);
-            free(hat);
+            _glfwFree(hat);
         }
         CFArrayRemoveAllValues(joystick->hats);
         joystick->hats = 0;

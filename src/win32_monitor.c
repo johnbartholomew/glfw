@@ -33,7 +33,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
-#include <malloc.h>
 
 // These constants are missing on MinGW
 #ifndef EDS_ROTATEDMODE
@@ -131,7 +130,7 @@ _GLFWmonitor** _glfwPlatformGetMonitors(int* count)
             else
                 size = 4;
 
-            monitors = (_GLFWmonitor**) realloc(monitors, sizeof(_GLFWmonitor*) * size);
+            monitors = (_GLFWmonitor**) _glfwCheckedRealloc(monitors, sizeof(_GLFWmonitor*) * size);
         }
 
         ZeroMemory(&display, sizeof(DISPLAY_DEVICE));
@@ -156,7 +155,7 @@ _GLFWmonitor** _glfwPlatformGetMonitors(int* count)
                                              GetDeviceCaps(dc, HORZSIZE),
                                              GetDeviceCaps(dc, VERTSIZE));
 
-        free(name);
+        _glfwFree(name);
         DeleteDC(dc);
 
         wcscpy(monitors[found]->win32.name, adapter.DeviceName);
@@ -249,7 +248,7 @@ GLFWvidmode* _glfwPlatformGetVideoModes(_GLFWmonitor* monitor, int* found)
             else
                 count = 128;
 
-            result = (GLFWvidmode*) realloc(result, count * sizeof(GLFWvidmode));
+            result = (GLFWvidmode*) _glfwCheckedRealloc(result, count * sizeof(GLFWvidmode));
         }
 
         result[*found] = mode;

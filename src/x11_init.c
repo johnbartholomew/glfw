@@ -638,7 +638,7 @@ void _glfwPlatformTerminate(void)
     terminateDisplay();
 
     if (_glfw.x11.selection.string)
-        free(_glfw.x11.selection.string);
+        _glfwFree(_glfw.x11.selection.string);
 }
 
 const char* _glfwPlatformGetVersionString(void)

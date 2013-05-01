@@ -80,8 +80,8 @@ static int openJoystickDevice(int joy, const char* path)
     ioctl(fd, JSIOCGBUTTONS, &numButtons);
     _glfw.x11.joystick[joy].numButtons = (int) numButtons;
 
-    _glfw.x11.joystick[joy].axis = (float*) calloc(numAxes, sizeof(float));
-    _glfw.x11.joystick[joy].button = (unsigned char*) calloc(numButtons, 1);
+    _glfw.x11.joystick[joy].axis = (float*) _glfwCheckedCalloc(numAxes, sizeof(float));
+    _glfw.x11.joystick[joy].button = (unsigned char*) _glfwCheckedCalloc(numButtons, 1);
 
     _glfw.x11.joystick[joy].present = GL_TRUE;
 #endif // __linux__
@@ -214,9 +214,9 @@ void _glfwTerminateJoysticks(void)
         if (_glfw.x11.joystick[i].present)
         {
             close(_glfw.x11.joystick[i].fd);
-            free(_glfw.x11.joystick[i].axis);
-            free(_glfw.x11.joystick[i].button);
-            free(_glfw.x11.joystick[i].name);
+            _glfwFree(_glfw.x11.joystick[i].axis);
+            _glfwFree(_glfw.x11.joystick[i].button);
+            _glfwFree(_glfw.x11.joystick[i].name);
 
             _glfw.x11.joystick[i].present = GL_FALSE;
         }

@@ -709,4 +709,20 @@ void _glfwDestroyMonitor(_GLFWmonitor* monitor);
   */
 void _glfwDestroyMonitors(_GLFWmonitor** monitors, int count);
 
+/*! @ingroup utility
+ */
+void *_glfwCheckedMalloc(size_t size);
+
+/*! @ingroup utility
+ */
+void *_glfwCheckedCalloc(size_t count, size_t size);
+
+/*! @ingroup utility
+ */
+void *_glfwCheckedRealloc(void *ptr, size_t size);
+
+/*! @ingroup utility
+ */
+void _glfwFree(void *ptr);
+
 #endif // _internal_h_

@@ -31,7 +31,6 @@
 #include "internal.h"
 
 #include <stdlib.h>
-#include <malloc.h>
 #include <windowsx.h>
 
 
@@ -779,7 +778,7 @@ static int createWindow(_GLFWwindow* window,
                                           GetModuleHandle(NULL),
                                           window); // Pass object to WM_CREATE
 
-    free(wideTitle);
+    _glfwFree(wideTitle);
 
     if (!window->win32.handle)
     {
@@ -905,7 +904,7 @@ void _glfwPlatformSetWindowTitle(_GLFWwindow* window, const char* title)
     }
 
     SetWindowText(window->win32.handle, wideTitle);
-    free(wideTitle);
+    _glfwFree(wideTitle);
 }
 
 void _glfwPlatformGetWindowPos(_GLFWwindow* window, int* xpos, int* ypos)

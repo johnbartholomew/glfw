@@ -33,9 +33,6 @@
 
 #include <string.h>
 #include <stdlib.h>
-#if defined(_MSC_VER)
- #include <malloc.h>
-#endif
 
 
 // Return the maxiumum of the specified values
@@ -192,7 +189,7 @@ GLFWAPI GLFWwindow* glfwCreateWindow(int width, int height,
     if (!_glfwIsValidContextConfig(&wndconfig))
         return GL_FALSE;
 
-    window = (_GLFWwindow*) calloc(1, sizeof(_GLFWwindow));
+    window = (_GLFWwindow*) _glfwCheckedCalloc(1, sizeof(_GLFWwindow));
     window->next = _glfw.windowListHead;
     _glfw.windowListHead = window;
 
@@ -398,7 +395,7 @@ GLFWAPI void glfwDestroyWindow(GLFWwindow* handle)
         *prev = window->next;
     }
 
-    free(window);
+    _glfwFree(window);
 }
 
 GLFWAPI int glfwWindowShouldClose(GLFWwindow* handle)

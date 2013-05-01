@@ -32,7 +32,6 @@
 #include <limits.h>
 #include <string.h>
 #include <stdlib.h>
-#include <malloc.h>
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -59,7 +58,7 @@ void _glfwPlatformSetClipboardString(_GLFWwindow* window, const char* string)
     stringHandle = GlobalAlloc(GMEM_MOVEABLE, wideSize);
     if (!stringHandle)
     {
-        free(wideString);
+        _glfwFree(wideString);
 
         _glfwInputError(GLFW_PLATFORM_ERROR,
                         "Win32: Failed to allocate global handle for clipboard");
@@ -72,7 +71,7 @@ void _glfwPlatformSetClipboardString(_GLFWwindow* window, const char* string)
     if (!OpenClipboard(window->win32.handle))
     {
         GlobalFree(stringHandle);
-        free(wideString);
+        _glfwFree(wideString);
 
         _glfwInputError(GLFW_PLATFORM_ERROR, "Win32: Failed to open clipboard");
         return;
@@ -82,7 +81,7 @@ void _glfwPlatformSetClipboardString(_GLFWwindow* window, const char* string)
     SetClipboardData(CF_UNICODETEXT, stringHandle);
     CloseClipboard();
 
-    free(wideString);
+    _glfwFree(wideString);
 }
 
 const char* _glfwPlatformGetClipboardString(_GLFWwindow* window)
@@ -111,7 +110,7 @@ const char* _glfwPlatformGetClipboardString(_GLFWwindow* window)
         return NULL;
     }
 
-    free(_glfw.win32.clipboardString);
+    _glfwFree(_glfw.win32.clipboardString);
     _glfw.win32.clipboardString =
         _glfwCreateUTF8FromWideString(GlobalLock(stringHandle));
 

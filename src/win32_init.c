@@ -31,7 +31,6 @@
 #include "internal.h"
 
 #include <stdlib.h>
-#include <malloc.h>
 
 #ifdef __BORLANDC__
 // With the Borland C++ compiler, we want to disable FPU exceptions
@@ -140,11 +139,11 @@ WCHAR* _glfwCreateWideStringFromUTF8(const char* source)
     if (!length)
         return NULL;
 
-    target = (WCHAR*) malloc(sizeof(WCHAR) * (length + 1));
+    target = (WCHAR*) _glfwCheckedMalloc(sizeof(WCHAR) * (length + 1));
 
     if (!MultiByteToWideChar(CP_UTF8, 0, source, -1, target, length + 1))
     {
-        free(target);
+        _glfwFree(target);
         return NULL;
     }
 
@@ -162,11 +161,11 @@ char* _glfwCreateUTF8FromWideString(const WCHAR* source)
     if (!length)
         return NULL;
 
-    target = (char*) malloc(length + 1);
+    target = (char*) _glfwCheckedMalloc(length + 1);
 
     if (!WideCharToMultiByte(CP_UTF8, 0, source, -1, target, length + 1, NULL, NULL))
     {
-        free(target);
+        _glfwFree(target);
         return NULL;
     }
 
